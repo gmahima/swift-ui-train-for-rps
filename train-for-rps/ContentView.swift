@@ -16,7 +16,7 @@ struct ContentView: View {
     var maxTurns = 10
     @State var turn = 1
     @State var score = 0
-    
+    @State var didWinLastRound: Bool?
     
     func handleThrow (choice: Int) {
         if turn <= maxTurns {
@@ -25,21 +25,27 @@ struct ContentView: View {
                 switch(appChoice) {
                 case 0: if(choice == 1) {
                     score += 1
+                    didWinLastRound = true
                 }
                 else {
                     score += -1
+                    didWinLastRound = false
                 }
                 case 1: if(choice == 2) {
                     score += 1
+                    didWinLastRound = true
                 }
                 else {
                     score += -1
+                    didWinLastRound = false
                 }
                 case 2: if(choice == 0) {
                     score += 1
+                    didWinLastRound = true
                 }
                 else {
                     score += -1
+                    didWinLastRound = false
                 }
                 default: print("error")
                 }
@@ -48,21 +54,27 @@ struct ContentView: View {
                 switch(appChoice) {
                 case 0: if(choice == 2) {
                     score += 1
+                    didWinLastRound = true
                 }
                 else {
                     score += -1
+                    didWinLastRound = false
                 }
                 case 1: if(choice == 0) {
                     score += 1
+                    didWinLastRound = true
                 }
                 else {
                     score += -1
+                    didWinLastRound = false
                 }
                 case 2: if(choice == 1) {
                     score += 1
+                    didWinLastRound = true
                 }
                 else {
                     score += -1
+                    didWinLastRound = false
                 }
                 default: print("error")
                 }
@@ -80,17 +92,19 @@ struct ContentView: View {
     var body: some View {
         VStack{
             VStack(content: {
-                Text("let's get you trained for rock paper sissors")
+                Text("train for rock paper sissors").font(.largeTitle)
                 Text("Turn \(turn < maxTurns ? turn : maxTurns) of \(maxTurns)")
                 VStack{
                     Text("Play to")
                     if (shouldWin) {
-                      Text("win")
+                        Text("win").padding().background(Color.green).foregroundColor(.white)
+                            .clipShape(Capsule())
                     }
                     else {
-                        Text("lose")
+                        Text("lose").padding().background(Color.red).foregroundColor(.white)
+                            .clipShape(Capsule())
                     }
-                    Text("against \(choices[appChoice])")
+                    Text("against \(choices[appChoice])").padding().background(Color.black).foregroundColor(.white).clipShape(Capsule())
 
 
                 }
@@ -102,10 +116,10 @@ struct ContentView: View {
                         choice in
                         Button(choices[choice], action: {
                            handleThrow(choice: choice)
-                        }).disabled(turn > maxTurns ? true : false)
+                        }).padding().background(turn <= maxTurns ? Color.blue : Color.gray).clipShape(Capsule()).foregroundColor(.white).disabled(turn > maxTurns ? true : false)
                     })
                 }
-                Text("score: \(score)")
+                Text("score: \(score)").foregroundColor(didWinLastRound == nil ? Color.blue : (didWinLastRound! == true ? Color.green : Color.red))
             }
 
 
